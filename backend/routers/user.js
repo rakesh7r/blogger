@@ -15,21 +15,21 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', (req, res) => {
   const { user } = req.body;
-  User.findByIdAndUpdate(req.params.id, user, (err, user) => {
-    if (err) {
-      res.status(500).send;
-    }
-    res.status(200).send(user);
-  });
+  try {
+    const updatedUser = User.findByIdAndUpdate(req.params.id, user);
+    res.status(200).send(updatedUser);
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
 
 router.delete('/:id', (req, res) => {
-  User.findByIdAndDelete(req.params.id, (err, user) => {
-    if (err) {
-      res.status(500).send;
-    }
-    res.status(200).send(user);
-  });
+  try {
+    User.findByIdAndDelete(req.params.id);
+    res.status(200).send('User deleted');
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
 
 module.exports = router;
