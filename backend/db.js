@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 
 mongoose
-  .connect(
-    'mongodb+srv://rakeshgandla200:mdG4VYgGBMtrQtWE@cluster0.qtotssa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
-  )
+  .connect(process.env.MONGO_CONNECT)
   .then(() => console.log('Connected to the database'))
   .catch((err) => console.error('Connection error:', err));
 

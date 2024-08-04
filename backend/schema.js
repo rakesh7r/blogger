@@ -5,17 +5,18 @@ const commentSchema = new Schema({
   comment: { type: String, required: true },
   date: { type: Date, default: Date },
   user: { type: Schema.Types.ObjectId, ref: 'User' },
-  replies: [this],
+  replies: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
 });
 
 const blogSchema = new Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
-  author: { type: Schema.Types.ObjectId, ref: 'User' },
-  comments: [commentSchema],
+  authorId: { type: Schema.Types.ObjectId, ref: 'User' },
+  author: { type: String },
+  comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
   reactions: [String],
-  createdAt: { type: Date, default: Date },
-  updatedAt: { type: Date, default: Date },
+  createdAt: { type: Date },
+  updatedAt: { type: Date },
   media: [String],
 });
 
@@ -23,9 +24,9 @@ const userSchema = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   profilePicture: { type: String },
-  username: { type: String },
-  blogs: [blogSchema],
-  following: [this],
+  username: { type: String, required: true, unique: true },
+  blogs: [{ type: Schema.Types.ObjectId, ref: 'Blog' }],
+  following: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 });
 
 const Blog = mongoose.model('Blog', blogSchema);

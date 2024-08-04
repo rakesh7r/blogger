@@ -2,6 +2,15 @@ const express = require('express');
 const router = express.Router();
 const { User } = require('../schema');
 
+router.get('/:username', async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username });
+    res.status(200).send(user);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
 router.post('/', async (req, res) => {
   const { user } = req.body;
   const newUser = new User(user);
@@ -13,20 +22,24 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:username', async (req, res) => {
   const { user } = req.body;
+  const { username } = user;
   try {
-    const updatedUser = User.findByIdAndUpdate(req.params.id, user);
+    const updatedUser = await User.findByIdAndUpdate({ username }, user);
     res.status(200).send(updatedUser);
   } catch (err) {
+    console.log(err);
     res.status(500).send(err);
   }
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:username', async (req, res) => {
   try {
-    User.findByIdAndDelete(req.params.id);
-    res.status(200).send('User deleted');
+    const deletedUser = await User.findOneAndDelete({
+      username: req.params.username,
+    });
+    res.status(200).send(deletedUser);
   } catch (err) {
     res.status(500).send(err);
   }
